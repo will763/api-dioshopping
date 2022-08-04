@@ -1,4 +1,4 @@
-import { getCustomRepository } from "typeorm";
+import { getCustomRepository, getRepository } from "typeorm";
 import { MessagesRepository } from "../repository/MessagesRepository";
 
 interface IMessage {
@@ -6,24 +6,32 @@ interface IMessage {
     message: string
 }
 
-class CreateMessageService {
-    async execute({email, message}: IMessage){
-        const messageRepository = getCustomRepository(MessagesRepository);
 
-        if(!email){
+class CreateMessageService {
+    private messageRepository: MessagesRepository;
+
+    constructor(repository) {
+        this.messageRepository = getCustomRepository(
+            repository
+        );
+    }
+
+    async execute({ email, message }: IMessage) {
+
+        if (!email) {
             throw new Error("Por favor informe um email!")
         }
 
-        if(!message){
+        if (!message) {
             throw new Error("Por favor escreva uma messagem!")
         }
 
-        const newMessage = messageRepository.create({ email, message })
+        const newMessage = this.messageRepository.create({ email, message })
 
-        await messageRepository.save(newMessage);
+        await this.messageRepository.save(newMessage);
 
         return newMessage;
     }
 }
 
-export  { CreateMessageService }
+export { CreateMessageService }
