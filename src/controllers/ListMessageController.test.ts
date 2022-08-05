@@ -4,7 +4,7 @@ import { MessagesRepository } from '../repository/MessagesRepository';
 import { app } from '../server';
 import { CreateMessageService } from '../services/CreateMessageService';
 
-describe('CreateMessageController', () => {
+describe('ListMessageController', () => {
 
     beforeAll(async () => {
         const connection = await createConnection();
@@ -19,7 +19,7 @@ describe('CreateMessageController', () => {
         await connection.close();
     })
 
-    test('should able to create a message', () => {
+    test('should able to return a list of message', () => {
 
         return request(app).get('/message').then(response => {
             expect(response.statusCode).toBe(200);
